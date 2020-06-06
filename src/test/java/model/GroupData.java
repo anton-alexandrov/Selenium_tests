@@ -1,3 +1,5 @@
+package model;
+
 public class GroupData {
     private final String groupName;
     private final String groupHeader;
