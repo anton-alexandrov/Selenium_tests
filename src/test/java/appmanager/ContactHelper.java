@@ -1,9 +1,12 @@
 package appmanager;
 
 import model.ContactData;
-import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactHelper extends HelperBase {
 
@@ -40,5 +43,42 @@ public class ContactHelper extends HelperBase {
     public void submitContactCreation() {
         driver.findElement(By.name("submit")).click();
     }
+
+    public List<WebElement> getAllContacts() {
+        List<WebElement> list = driver.findElements(By.name("selected[]"));
+        return list;
+    }
+    public List<WebElement> getAllContactsByXpath() {
+        List<WebElement> list = driver.findElements(By.xpath("//*[@id=\"maintable\"]/tbody/tr[1]/th[3]"));
+        return list;
+    }
+
+
+    public List<WebElement> getAllRows() {
+
+        String before = "//*[@id=\"maintable\"]/tbody/tr[";
+        String after = "]/td[3]";
+        String result = "";
+        List<String> list = new ArrayList<>();
+        List<WebElement> elements = new ArrayList<>();
+
+        for (int i = 2; i < getAllContacts().size()+2; i++) {
+            result = before + i + after;
+            list.add(result);
+        }
+
+        for (String s:list){
+            elements.add(driver.findElement(By.xpath(s)));
+        }
+
+        return elements;
+
+    }
+
+    public WebElement getOne () {
+        WebElement element = driver.findElement(By.xpath("//*[@id=\"maintable\"]/tbody/tr[2]/td[3]"));
+        return element;
+    }
+
 
 }

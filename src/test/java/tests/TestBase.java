@@ -2,6 +2,7 @@ package tests;
 
 import appmanager.ApplicationManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import model.GroupData;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.By;
@@ -34,6 +35,7 @@ public class TestBase {
         driver.findElement(By.name("pass")).sendKeys("secret");
         driver.findElement(By.xpath("/html/body/div/div[4]/form/input[3]")).click();
     }
+
 
 
 }
