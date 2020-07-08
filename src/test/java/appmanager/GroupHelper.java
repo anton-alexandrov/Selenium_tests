@@ -54,15 +54,16 @@ public class GroupHelper extends HelperBase {
     public List<GroupData> getGroupList() {
         List<GroupData> groups = new ArrayList<GroupData>();
         List<WebElement> elements = driver.findElements(By.name("selected[]"));
+        System.out.println("Size: "+elements.size());
         for (WebElement element : elements){
             String name = element.getText();
+            int groupID = Integer.parseInt(element.getAttribute("value"));
             System.out.println(element.getText());
-            GroupData group = new GroupData(name, null, null);
+            GroupData group = new GroupData(name, null, null, groupID);
             groups.add(group);
         }
         return groups;
     }
-
 
     public void createGroup(GroupData group) {
       initGroupCreation();
@@ -77,5 +78,60 @@ public class GroupHelper extends HelperBase {
         } catch (NoSuchElementException e) {
             return false;
         }
+    }
+
+    public List<GroupData> getGroupListByXPath() {
+        String before = "/html/body/div/div[4]/form/input[";
+        String after = "]";
+        String result = "";
+        List<String> listOfXPathes = new ArrayList<>();
+        int n = driver.findElements(By.name("selected[]")).size();
+        System.out.println("Number of elements:" + n);
+        for (int i = 4; i <= n+3; i++) {
+            result = before + i + after;
+            System.out.println("Xpath: "+ result);
+            listOfXPathes.add(result);
+        }
+
+        List<WebElement> elements = new ArrayList<>();
+        for (String s:listOfXPathes){
+            elements.add(driver.findElement(By.xpath(s)));
+        }
+
+
+        List<GroupData> groups = new ArrayList<GroupData>();
+        for (WebElement element : elements){
+
+            System.out.println("Is Displayed: "+ element.isDisplayed());
+            System.out.println("Is Enabled: " + element.isEnabled());
+            System.out.println("getText" + element.getText());
+            System.out.println("innerText: "+element.getAttribute("innerText"));
+            System.out.println("Attribute Text: "+element.getAttribute("text"));
+            System.out.println("innerHTML: "+element.getAttribute("innerHTML"));
+            System.out.println("textContent: "+element.getAttribute("textContent"));
+            System.out.println("value: "+element.getAttribute("value"));
+            System.out.println("title: "+element.getAttribute("title"));
+            System.out.println("data: "+element.getAttribute("data"));
+            System.out.println("Node Value: "+element.getAttribute("nodeValue"));
+            System.out.println("wholeText: "+element.getAttribute("wholeText"));
+            System.out.println(element.getCssValue("nodeValue"));
+            System.out.println(element.getCssValue("data"));
+            System.out.println(element.getCssValue("wholeText"));
+
+
+            String name = element.getAttribute("textContent");
+            int groupID = Integer.parseInt(element.getAttribute("value"));
+            System.out.println("ID: " + groupID);
+
+            GroupData group = new GroupData(name, null, null, groupID);
+
+            groups.add(group);
+        }
+        return groups;
+
+    }
+
+    public void getGroupByXPath() {
+        driver.findElements(By.xpath("/html/body/div/div[4]/form/input[4]"));
     }
 }

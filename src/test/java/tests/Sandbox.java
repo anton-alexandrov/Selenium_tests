@@ -14,15 +14,10 @@ public class Sandbox extends TestBase {
         app.getNavigationHelper().gotoHomePage();
         List <WebElement> list1 = app.getContactHelper().getAllRows();
         for (WebElement e: list1){
-            System.out.println("E: " + e.getText());
+            System.out.println("Name: " + e.getText());
+            System.out.println("getAttribute accept" + e.getAttribute("accept"));
+
         }
-
-
-        List<WebElement> list = app.getContactHelper().getAllContactsByXpath();
-        for (WebElement element : list){
-            System.out.println("Text: " + element.getText());
-         }
-
 
     }
 
@@ -31,4 +26,16 @@ public class Sandbox extends TestBase {
         app.getNavigationHelper().gotoHomePage();
         System.out.println(app.getContactHelper().getOne().getText());
     }
+
+    @Test
+    public void getListOfGroups(){
+        app.getNavigationHelper().gotoHomePage();
+        app.getNavigationHelper().gotoGroupPage();
+        app.getGroupHelper().getGroupListByXPath();
+
+    }
+
+
+
+
 }

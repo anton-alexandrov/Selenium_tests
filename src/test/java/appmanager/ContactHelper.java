@@ -48,10 +48,7 @@ public class ContactHelper extends HelperBase {
         List<WebElement> list = driver.findElements(By.name("selected[]"));
         return list;
     }
-    public List<WebElement> getAllContactsByXpath() {
-        List<WebElement> list = driver.findElements(By.xpath("//*[@id=\"maintable\"]/tbody/tr[1]/th[3]"));
-        return list;
-    }
+
 
 
     public List<WebElement> getAllRows() {
