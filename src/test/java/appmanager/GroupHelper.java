@@ -118,7 +118,6 @@ public class GroupHelper extends HelperBase {
             System.out.println(element.getCssValue("data"));
             System.out.println(element.getCssValue("wholeText"));
 
-
             String name = element.getAttribute("textContent");
             int groupID = Integer.parseInt(element.getAttribute("value"));
             System.out.println("ID: " + groupID);

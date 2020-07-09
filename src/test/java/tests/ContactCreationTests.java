@@ -3,6 +3,7 @@ package tests;
 import model.ContactData;
 import org.junit.Test;
 
+
 public class ContactCreationTests extends TestBase {
 
 

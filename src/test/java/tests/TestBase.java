@@ -1,14 +1,11 @@
 package tests;
 
 import appmanager.ApplicationManager;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import model.GroupData;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.BrowserType;
 
 public class TestBase {
