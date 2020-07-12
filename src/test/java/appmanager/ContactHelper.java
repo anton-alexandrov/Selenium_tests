@@ -22,7 +22,7 @@ public class ContactHelper extends HelperBase {
     }
 
     public void fillContactForm(ContactData contactData) {
-        type(By.name("address"), contactData.getFirstAddress());
+        //type(By.name("address"), contactData.getFirstAddress());
         click(By.name("quickadd"));
 
         click(By.xpath("/html/body/div/div[4]/form/input[2]"));
@@ -50,7 +50,6 @@ public class ContactHelper extends HelperBase {
     }
 
 
-
     public List<WebElement> getAllRows() {
 
         String before = "//*[@id=\"maintable\"]/tbody/tr[";
@@ -59,12 +58,12 @@ public class ContactHelper extends HelperBase {
         List<String> list = new ArrayList<>();
         List<WebElement> elements = new ArrayList<>();
 
-        for (int i = 2; i < getAllContacts().size()+2; i++) {
+        for (int i = 2; i < getAllContacts().size() + 2; i++) {
             result = before + i + after;
             list.add(result);
         }
 
-        for (String s:list){
+        for (String s : list) {
             elements.add(driver.findElement(By.xpath(s)));
         }
 
@@ -72,10 +71,50 @@ public class ContactHelper extends HelperBase {
 
     }
 
-    public WebElement getOne () {
+
+    public WebElement getOne() {
         WebElement element = driver.findElement(By.xpath("//*[@id=\"maintable\"]/tbody/tr[2]/td[3]"));
         return element;
     }
 
+    public List<WebElement> getContacts() {
+        List<WebElement> elements = getAllContacts();
+        List<ContactData> contacts = new ArrayList<>();
 
+        for (WebElement c : elements) {
+            System.out.println("Accept:" + c.getAttribute("accept"));
+            //System.out.println("TD tag:" + c.getTagName("br"));
+            System.out.println("Test address:" + c.getCssValue("#maintable > tbody > tr:nth-child(2) > td:nth-child(4)"));
+
+            System.out.println("CSS"+c.getCssValue("#maintable > tbody > tr:nth-child(2) > td:nth-child(3)"));
+            //address
+            // *[@id="maintable"]/tbody/tr[**]/td[4]
+        }
+
+        return elements;
+
+    }
+
+    public WebElement selectAnyContact() {
+        return (driver.findElement(By.name("selected[]")));
+    }
+
+    public void modify(ContactData contactData) {
+        driver.findElement(By.xpath("//img[@alt=\'Edit\']")).click();
+        driver.findElement(By.name("firstname")).clear();
+        driver.findElement(By.name("firstname")).sendKeys(contactData.getName());
+        driver.findElement(By.name("lastname")).click();
+        driver.findElement(By.name("lastname")).clear();
+        driver.findElement(By.name("lastname")).sendKeys(contactData.getLastName());
+        driver.findElement(By.name("address")).click();
+        driver.findElement(By.name("address")).clear();
+        driver.findElement(By.name("address")).sendKeys(contactData.getAddress());
+        driver.findElement(By.name("email")).click();
+        driver.findElement(By.name("email")).clear();
+        driver.findElement(By.name("email")).sendKeys(contactData.getEmail());
+    }
+
+    public void update() {
+        driver.findElement(By.name("update")).click();
+    }
 }

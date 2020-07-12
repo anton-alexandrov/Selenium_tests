@@ -2,22 +2,29 @@ package tests;
 
 import model.GroupData;
 import org.junit.Assert;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class GroupModificationTests extends TestBase {
 
+    @BeforeMethod
+    public void ensurePreconditions () {
+        app.getNavigationHelper().gotoGroupPage();
+        if (app.getGroupHelper().getGroupList().size()==0) {
+            app.getGroupHelper().createGroup(new GroupData().withName("Group for modification"));
+            app.getNavigationHelper().gotoGroupPage();
+        }
+    }
+
     @Test
     public void testGroupModification (){
-        app.getNavigationHelper().gotoGroupPage();
         List<GroupData> before = app.getGroupHelper().getGroupList();
-        app.getGroupHelper().selectGroup(before.size()-1);
-        app.getGroupHelper().initGroupModification();
-        GroupData group = new GroupData("Modified_name", "Modified_header", "Modified_footer", before.get(before.size()-1).getGroupID());
-        app.getGroupHelper().fillGroupForm(group);
-        app.getGroupHelper().submitGroupModification();
+        int index = before.size()-1;
+        GroupData group = new GroupData().withName("Modified_name").withHeader("Modified_header").withFooter("Modified_footer").withID(before.get(index).getGroupID());
+        app.getGroupHelper().modifyGroup(index, group);
         List<GroupData> after = app.getGroupHelper().getGroupList();
         Assert.assertEquals(after.size(), before.size());
 
@@ -26,7 +33,7 @@ public class GroupModificationTests extends TestBase {
         // after modification order could be changed and we can't predict where new element is
         //so we have to use Set, not List. But in Set all records with the same value will be grouped. It's not good for tests
         //to avoid this we have to use unique ID
-        before.remove(before.size()-1);
+        before.remove(index);
         before.add(group);
         //option#2
         Comparator<? super GroupData> byID = (g1, g2)->Integer.compare(g1.getGroupID(), g2.getGroupID());
@@ -40,4 +47,6 @@ public class GroupModificationTests extends TestBase {
 
         //another way, to sort collection
     }
+
+
 }

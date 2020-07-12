@@ -1,25 +1,26 @@
 package tests;
 
 import appmanager.ApplicationManager;
-import org.junit.After;
-import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.BrowserType;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
 public class TestBase {
 
-    protected final ApplicationManager app = new ApplicationManager(BrowserType.CHROME);
+    protected static final ApplicationManager app = new ApplicationManager(BrowserType.CHROME);
+    //we need static here ^ to make app available for all classes and methods.
     protected WebDriver driver;
 
-    @Before
+    @BeforeSuite //run browser one time for the whole suit
     public void setUp() {
         app.init();
     }
 
 
-    @After
+    @AfterSuite
     public void tearDown() {
         app.stop();
     }

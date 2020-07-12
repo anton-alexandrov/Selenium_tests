@@ -2,12 +2,13 @@ package appmanager;
 
 import model.GroupData;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GroupHelper extends HelperBase {
 
@@ -59,7 +60,7 @@ public class GroupHelper extends HelperBase {
             String name = element.getText();
             int groupID = Integer.parseInt(element.getAttribute("value"));
             System.out.println(element.getText());
-            GroupData group = new GroupData(name, null, null, groupID);
+            GroupData group = new GroupData().withName(name).withID(groupID);
             groups.add(group);
         }
         return groups;
@@ -72,12 +73,17 @@ public class GroupHelper extends HelperBase {
     }
 
     public boolean isThereAGroup(By by) {
-        try {
-            driver.findElement(by);
-            return true;
-        } catch (NoSuchElementException e) {
+    //   try {
+    //       driver.findElement(by);
+    //       return true;
+    //   } catch (WebDriverException e) {
+    //       return false;
+    //   }
+
+        if (driver.findElements(by).size()==0){
             return false;
-        }
+        } else
+        return true;
     }
 
     public List<GroupData> getGroupListByXPath() {
@@ -122,7 +128,7 @@ public class GroupHelper extends HelperBase {
             int groupID = Integer.parseInt(element.getAttribute("value"));
             System.out.println("ID: " + groupID);
 
-            GroupData group = new GroupData(name, null, null, groupID);
+            GroupData group = new GroupData().withName(name).withID(groupID);
 
             groups.add(group);
         }
@@ -130,7 +136,37 @@ public class GroupHelper extends HelperBase {
 
     }
 
+    public void modifyGroup(int index, GroupData group) {
+        selectGroup(index);
+        initGroupModification();
+        fillGroupForm(group);
+        submitGroupModification();
+    }
+
+    public void deleteGroup(int index) {
+        selectGroup(index);
+        submitGroupDeletion();
+
+    }
+
     public void getGroupByXPath() {
         driver.findElements(By.xpath("/html/body/div/div[4]/form/input[4]"));
     }
+
+    public Set<GroupData> all() {
+        Set<GroupData> groups = new HashSet<GroupData>();
+
+
+        List<WebElement> elements = driver.findElements(By.name("selected[]"));
+        System.out.println("Size: "+elements.size());
+        for (WebElement element : elements){
+            String name = element.getText();
+            int groupID = Integer.parseInt(element.getAttribute("value"));
+            System.out.println(element.getText());
+            GroupData group = new GroupData().withName(name).withID(groupID);
+            groups.add(group);
+        }
+        return groups;
+    }
+
 }

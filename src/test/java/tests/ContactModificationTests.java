@@ -1,15 +1,24 @@
 package tests;
 
 import model.ContactData;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 public class ContactModificationTests extends TestBase{
-    @Test
+    @Test//(enabled = false)
+
     public void testContactCreation() {
 
-        app.getNavigationHelper().gotoContactPage();
-        app.getContactHelper().fillContactForm(new ContactData("Test address", "Test Name", "Test Lastname", "Test address", "test@test.com"));
-        app.getContactHelper().submitContactCreation();
+        //app.getNavigationHelper().gotoContactPage();
+        app.getNavigationHelper().gotoHomePage();
+        app.getContactHelper().selectAnyContact();
+
+        ContactData modifiedContact = new ContactData().
+                withAddress("Modified Test address").withName("Modified Test Name").withLastName("Modified Test Lastname").withMail("newtest@test.com");
+
+        app.getContactHelper().modify(modifiedContact);
+       // app.getContactHelper().fillContactForm(modifiedContact);
+        //app.getContactHelper().submitContactCreation();
+        app.getContactHelper().update();
         app.getNavigationHelper().gotoHomePage();
 
     }

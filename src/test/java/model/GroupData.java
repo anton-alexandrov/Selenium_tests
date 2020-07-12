@@ -3,24 +3,11 @@ package model;
 import java.util.Objects;
 
 public class GroupData {
-    private final String groupName;
-    private final String groupHeader;
-    private final String groupFooter;
-    private  int groupID;
+    private  String groupName;
+    private  String groupHeader;
+    private  String groupFooter;
+    private  int groupID = Integer.MAX_VALUE;
 
-    public GroupData(String groupName, String groupHeader, String groupFooter, int groupID) {
-        this.groupName = groupName;
-        this.groupHeader = groupHeader;
-        this.groupFooter = groupFooter;
-        this.groupID = groupID;
-    }
-
-    public GroupData(String groupName, String groupHeader, String groupFooter) {
-        this.groupName = groupName;
-        this.groupHeader = groupHeader;
-        this.groupFooter = groupFooter;
-        this.groupID = 0;
-    }
     public String getGroupName() {
         return groupName;
     }
@@ -58,7 +45,24 @@ public class GroupData {
         return Objects.hash(groupID);
     }
 
-    public void setGroupID(int groupID) {
+
+    public GroupData withName(String groupName) {
+        this.groupName = groupName;
+        return this;
+    }
+
+    public GroupData withHeader(String groupHeader) {
+        this.groupHeader = groupHeader;
+        return this;
+    }
+
+    public GroupData withFooter(String groupFooter) {
+        this.groupFooter = groupFooter;
+        return this;
+    }
+
+    public GroupData withID(int groupID) {
         this.groupID = groupID;
+        return this;
     }
 }

@@ -2,29 +2,36 @@ package tests;
 
 import model.GroupData;
 import org.junit.Assert;
-import org.junit.Test;
-import org.openqa.selenium.By;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class GroupDeletionTests extends TestBase {
 
+    @BeforeMethod
+    public void ensurePreconditions () {
+        app.getNavigationHelper().gotoGroupPage();
+        if (app.getGroupHelper().getGroupList().size()==0) {
+            app.getGroupHelper().createGroup(new GroupData().withName("Group for deletion"));
+            app.getNavigationHelper().gotoGroupPage();
+        }
+    }
+
     @Test
     public void testGroupDeletion() {
-        app.getNavigationHelper().gotoGroupPage();
-        if (!app.getGroupHelper().isThereAGroup(By.name("selected[]"))) {
-            app.getGroupHelper().createGroup(new GroupData("Test1", null, null));
-        }
         List<GroupData> before = app.getGroupHelper().getGroupList();
-        app.getGroupHelper().selectGroup(before.size()-1);
-        app.getGroupHelper().submitGroupDeletion();
+        int index = before.size()-1;
+        app.getGroupHelper().deleteGroup(index);
         app.getNavigationHelper().gotoGroupPage();
         List<GroupData> after = app.getGroupHelper().getGroupList();
-        Assert.assertEquals(after.size(), before.size() - 1);
+        Assert.assertEquals(after.size(), before.size()-1);
 
-        before.remove((before.size()-1));
+        before.remove(index);
         Assert.assertEquals(before, after);
 
     }
+
+
 
 }

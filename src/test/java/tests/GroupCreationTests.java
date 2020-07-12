@@ -2,18 +2,19 @@ package tests;
 
 import model.GroupData;
 import org.junit.Assert;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Set;
 
 
 public class GroupCreationTests extends TestBase {
 
-    @Test
+    @Test(enabled = false)
     public void testGroupCreation() {
         app.getNavigationHelper().gotoGroupPage();
         List<GroupData> before = app.getGroupHelper().getGroupList();
-        GroupData group = new GroupData("Test4_name", null, null);
+        GroupData group = new GroupData().withName("Test"+before.size()+"_name").withFooter("Footer");
         app.getGroupHelper().createGroup(group);
         app.getNavigationHelper().gotoGroupPage();
         List<GroupData> after = app.getGroupHelper().getGroupList();
@@ -47,14 +48,32 @@ public class GroupCreationTests extends TestBase {
         //Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
     }
 
-    @Test
+    @Test(enabled = false)
     public void bulkGroupCreation() {
         for (int i = 0; i < 5; i++) {
             app.getNavigationHelper().gotoGroupPage();
-            app.getGroupHelper().createGroup(new GroupData("Test" + i + "_name", "Test1_header", "Test1_footer"));
+            app.getGroupHelper().createGroup(new GroupData().withName("Test" + i + "_name").withHeader("Test1_header").withFooter("Test1_footer"));
             app.getNavigationHelper().gotoGroupPage();
 
         }
+    }
+
+    @Test(enabled = false)
+    //the same test as test#1, but implemented through Set, not Stream
+    public void testWithSet(){
+        app.getNavigationHelper().gotoGroupPage();
+        Set<GroupData> before = app.getGroupHelper().all();
+
+        GroupData group = new GroupData().withName("Test"+before.size()+"_name").withFooter("Footer");
+        app.getGroupHelper().createGroup(group);
+        app.getNavigationHelper().gotoGroupPage();
+        Set<GroupData> after = app.getGroupHelper().all();
+        Assert.assertEquals(after.size(), before.size() + 1);
+
+        group.withID(after.stream().mapToInt((g)->g.getGroupID()).max().getAsInt()); //covert stream of Groups to stream of ints
+        before.add(group);
+        Assert.assertEquals(before, after);
+
     }
 
 }
